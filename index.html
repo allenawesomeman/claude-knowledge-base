@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Antigravity 知識庫</title>
+<meta name="description" content="一位牙周病專科受訓醫師用 Claude Code 搭建的個人知識庫：文獻、課本、講稿、臨床訓練與研究寫作的 AI 工作流。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --bg2:#efece4; --card:#ffffff; --ink:#14202c; --ink2:#4a5866; --ink3:#7c8894;
+  --line:#e2ddd2; --teal:#0f766e; --teal-soft:#d6efe9; --coral:#d9536f; --coral-soft:#fbe3e8;
+  --gold:#b7791f; --gold-soft:#fbefd9; --indigo:#4f5bd5; --indigo-soft:#e3e6fb;
+  --shadow:0 1px 2px rgba(20,32,44,.05),0 8px 24px rgba(20,32,44,.06);
+  --hero1:#d6efe9; --hero2:#fbe3e8; --hero3:#e3e6fb;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e141b; --bg2:#141c25; --card:#18222d; --ink:#e8edf2; --ink2:#a9b5c1; --ink3:#7d8995;
+    --line:#26323e; --teal:#3cc4b4; --teal-soft:#123532; --coral:#f07b93; --coral-soft:#3a1d25;
+    --gold:#e3a94b; --gold-soft:#3a2c14; --indigo:#8d97f5; --indigo-soft:#1f2448;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    --hero1:#123532; --hero2:#3a1d25; --hero3:#1f2448;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e141b; --bg2:#141c25; --card:#18222d; --ink:#e8edf2; --ink2:#a9b5c1; --ink3:#7d8995;
+  --line:#26323e; --teal:#3cc4b4; --teal-soft:#123532; --coral:#f07b93; --coral-soft:#3a1d25;
+  --gold:#e3a94b; --gold-soft:#3a2c14; --indigo:#8d97f5; --indigo-soft:#1f2448;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  --hero1:#123532; --hero2:#3a1d25; --hero3:#1f2448;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden}
+.arch>*,.split>*,.grid>*{min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC",system-ui,-apple-system,sans-serif;line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased}
+a{color:var(--teal);text-decoration:none}
+a:hover{text-decoration:underline}
+code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:.86em}
+code{background:var(--bg2);padding:.1em .4em;border-radius:5px;border:1px solid var(--line)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 16px}
+h1,h2,h3{font-family:"Noto Serif TC",serif;line-height:1.3;margin:0}
+h2{font-size:clamp(1.6rem,3.4vw,2.2rem);font-weight:900}
+h3{font-size:1.12rem;font-weight:600}
+section{padding:72px 0}
+.eyebrow{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);font-weight:700;margin-bottom:10px}
+.lead{color:var(--ink2);max-width:720px;margin:14px 0 0}
+
+/* nav */
+nav.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.top .wrap{display:flex;align-items:center;gap:18px;height:56px}
+.brand{font-family:"Noto Serif TC",serif;font-weight:900;color:var(--ink);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--teal),var(--coral))}
+nav.top .links{display:flex;gap:16px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+nav.top .links a{color:var(--ink2);font-size:.9rem;white-space:nowrap}
+nav.top .links a:hover{color:var(--ink);text-decoration:none}
+.theme-btn{border:1px solid var(--line);background:var(--card);color:var(--ink2);border-radius:999px;width:34px;height:34px;cursor:pointer;flex:none}
+@media (max-width:760px){nav.top .links{display:none}.theme-btn{margin-left:auto}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:88px 0 64px}
+.hero::before{content:"";position:absolute;inset:-20% -10% auto -10%;height:560px;background:
+  radial-gradient(420px 280px at 15% 30%,var(--hero1),transparent 70%),
+  radial-gradient(380px 260px at 80% 20%,var(--hero2),transparent 70%),
+  radial-gradient(420px 260px at 60% 80%,var(--hero3),transparent 70%);z-index:0;opacity:.95}
+.hero .wrap{position:relative;z-index:1}
+.hero h1{font-size:clamp(2.1rem,6vw,3.6rem);font-weight:900;letter-spacing:-.01em}
+.hero h1 .grad{background:linear-gradient(90deg,var(--teal),var(--coral));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.sub{font-size:clamp(1.02rem,2vw,1.2rem);color:var(--ink2);max-width:760px;margin:18px 0 0}
+.formula{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.formula span{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:.92rem;box-shadow:var(--shadow)}
+.formula b{color:var(--teal)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:40px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.stat .n{font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.9rem;color:var(--ink)}
+.stat .l{font-size:.82rem;color:var(--ink3)}
+@media (max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}.stats .stat:last-child{grid-column:span 2}}
+
+/* intent chooser */
+.chooser{margin-top:40px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.chooser .q{font-weight:700;margin-bottom:12px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:8px 16px;border-radius:999px;cursor:pointer;font:inherit;font-size:.92rem;transition:.15s}
+.chip:hover,.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.route{margin-top:14px;color:var(--ink2);min-height:1.75em;font-size:.95rem}
+.route a{font-weight:700}
+
+/* architecture */
+.arch{display:grid;grid-template-columns:1.05fr 1fr;gap:28px;margin-top:36px;align-items:start}
+@media (max-width:860px){.arch{grid-template-columns:1fr}}
+.stack{display:flex;flex-direction:column;gap:10px}
+.layer{border-radius:16px;padding:16px 18px;border:1px solid var(--line);background:var(--card);cursor:pointer;transition:.18s;position:relative;box-shadow:var(--shadow)}
+.layer:hover,.layer.on{transform:translateX(6px);border-color:var(--c)}
+.layer.on{background:var(--cs)}
+.layer .t{display:flex;align-items:center;gap:10px;font-weight:700}
+.layer .t i{font-style:normal;width:28px;height:28px;border-radius:8px;background:var(--cs);color:var(--c);display:grid;place-items:center;font-size:.85rem;font-weight:900;flex:none}
+.layer .d{color:var(--ink2);font-size:.9rem;margin-top:4px}
+.layer.base{background:linear-gradient(90deg,var(--teal-soft),var(--indigo-soft));border-style:dashed;cursor:default}
+.layer.base:hover{transform:none}
+.arch-detail{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow);position:sticky;top:76px}
+.arch-detail h3{margin-bottom:8px}
+.arch-detail ul{margin:10px 0 0;padding-left:1.2em;color:var(--ink2)}
+.arch-detail .why{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--bg2);font-size:.92rem}
+
+/* pipeline */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:30px}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--ink2);padding:10px 18px;border-radius:12px;cursor:pointer;font:inherit;font-weight:500}
+.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.flow{margin-top:22px;display:flex;align-items:stretch;gap:0;overflow-x:auto;padding:6px 2px 14px;scroll-snap-type:x mandatory}
+.node{flex:0 0 200px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;cursor:pointer;transition:.15s;box-shadow:var(--shadow);text-align:left;font:inherit;color:inherit}
+.node:hover,.node.on{border-color:var(--teal);transform:translateY(-3px)}
+.node.on{background:var(--teal-soft)}
+.node .k{font-size:.72rem;color:var(--ink3);letter-spacing:.08em}
+.node .h{font-weight:700;margin-top:4px}
+.node .s{font-size:.82rem;color:var(--ink2);margin-top:6px}
+.arrow{flex:0 0 34px;display:grid;place-items:center;color:var(--ink3)}
+.node-detail{margin-top:8px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:18px 20px;color:var(--ink2);box-shadow:var(--shadow)}
+.node-detail b{color:var(--ink)}
+
+/* tools */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;transition:.15s}
+.card:hover{transform:translateY(-3px)}
+.card .top{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;white-space:nowrap}
+.b-daily{background:var(--teal-soft);color:var(--teal)}
+.b-built{background:var(--indigo-soft);color:var(--indigo)}
+.b-plan{background:var(--gold-soft);color:var(--gold)}
+.kind{font-size:.75rem;color:var(--ink3)}
+.card dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:.88rem}
+.card dt{color:var(--ink3);white-space:nowrap}
+.card dd{margin:0;color:var(--ink2)}
+
+/* skills table */
+.skillgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin-top:28px}
+.sk{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.sk h3{font-size:1rem;display:flex;align-items:center;gap:8px}
+.sk h3 .sw{width:10px;height:10px;border-radius:3px;background:var(--c)}
+.sk ul{list-style:none;padding:0;margin:10px 0 0}
+.sk li{padding:6px 0;border-top:1px dashed var(--line);font-size:.86rem;color:var(--ink2)}
+.sk li code{font-size:.8rem;color:var(--ink)}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:28px;counter-reset:r}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;position:relative}
+.rule::before{counter-increment:r;content:counter(r,decimal-leading-zero);font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.6rem;color:var(--coral);opacity:.85}
+.rule h3{margin-top:4px;font-size:1rem}
+.rule p{margin:6px 0 0;font-size:.88rem;color:var(--ink2)}
+.rule .lesson{margin-top:10px;font-size:.8rem;color:var(--ink3);border-top:1px dashed var(--line);padding-top:8px}
+
+/* steps */
+.steps{margin-top:30px;display:grid;gap:0;position:relative}
+.step{display:grid;grid-template-columns:56px 1fr;gap:16px;padding-bottom:26px;position:relative}
+.step:not(:last-child)::after{content:"";position:absolute;left:27px;top:52px;bottom:4px;width:2px;background:var(--line)}
+.step .num{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--teal),var(--indigo));color:#fff;display:grid;place-items:center;font-family:"Noto Serif TC",serif;font-weight:900;font-size:1.3rem}
+.step h3{margin-top:6px}
+.step p{margin:4px 0 0;color:var(--ink2)}
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+@media (max-width:760px){.split{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.box h3{margin-bottom:8px}
+.box ul{margin:0;padding-left:1.2em;color:var(--ink2);font-size:.92rem}
+pre{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px;overflow-x:auto;font-size:.82rem;line-height:1.6;margin:10px 0 0}
+
+footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--ink3);font-size:.86rem}
+.alt{background:var(--bg2)}
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav class="top"><div class="wrap">
+  <a class="brand" href="#top"><span class="dot"></span>Research Antigravity</a>
+  <div class="links">
+    <a href="#arch">架構</a><a href="#flows">工作流</a><a href="#tools">工具</a><a href="#skills">Skills</a><a href="#rules">規則</a><a href="#start">自己蓋一套</a>
+  </div>
+  <button class="theme-btn" id="themeBtn" aria-label="切換深淺色">◐</button>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap">
+  <div class="eyebrow">Claude Code × Periodontology</div>
+  <h1>把一個資料夾，<br>養成會<span class="grad">讀文獻、寫講稿、查證據</span>的研究助理</h1>
+  <p class="sub">這是一位牙周病專科受訓醫師的個人知識庫。文獻報告、課本讀書、演講筆記、專科準備、AI 研究論文，都在同一個資料夾裡由 Claude Code 讀、寫、查證，最後落檔進 Git。</p>
+  <div class="formula">
+    <span>資料夾 ＝ <b>大腦</b></span><span>CLAUDE.md ＝ <b>工作守則</b></span><span>Skills ＝ <b>SOP</b></span><span>MCP ＝ <b>查證管道</b></span><span>Git ＝ <b>保險</b></span>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n" data-to="639">639</div><div class="l">Git commits（2026-01 起）</div></div>
+    <div class="stat"><div class="n" data-to="1777">1,777</div><div class="l">Markdown 筆記與文件</div></div>
+    <div class="stat"><div class="n" data-to="271">271</div><div class="l">本機全文文獻庫</div></div>
+    <div class="stat"><div class="n" data-to="21">21</div><div class="l">自建／自維護 Skills</div></div>
+    <div class="stat"><div class="n" data-to="3">3</div><div class="l">MCP 查證管道</div></div>
+  </div>
+
+  <div class="chooser">
+    <div class="q">你想從哪裡開始？</div>
+    <div class="chips" id="chips">
+      <button class="chip" data-r="new">完全沒用過 Claude Code</button>
+      <button class="chip" data-r="user">已在用，想抄作業</button>
+      <button class="chip" data-r="doc">我是醫師，想看臨床怎麼用</button>
+      <button class="chip" data-r="build">想自己蓋一套</button>
+    </div>
+    <div class="route" id="route">點一個選項，我幫你指路。</div>
+  </div>
+</div></header>
+
+<section id="arch" class="alt"><div class="wrap reveal">
+  <div class="eyebrow">Architecture</div>
+  <h2>四層架構，一個資料夾</h2>
+  <p class="lead">AI 每次開新對話都是失憶的。這四層的工作，是讓它一打開資料夾就知道：我是誰、規矩是什麼、上次做到哪、遇到這種事該用哪套流程。</p>
+  <div class="arch">
+    <div class="stack" id="stack">
+      <div class="layer on" data-k="rule" style="--c:var(--coral);--cs:var(--coral-soft)"><div class="t"><i>1</i>規則層</div><div class="d">CLAUDE.md 鐵則＋路由表、protocols 按需讀取</div></div>
+      <div class="layer" data-k="mem" style="--c:var(--gold);--cs:var(--gold-soft)"><div class="t"><i>2</i>記憶層</div><div class="d">使用者糾正過的錯、專案進度入口、交接書</div></div>
+      <div class="layer" data-k="skill" style="--c:var(--teal);--cs:var(--teal-soft)"><div class="t"><i>3</i>技能層</div><div class="d">Skills＝可重複的 SOP；Hooks 自動接線</div></div>
+      <div class="layer" data-k="tool" style="--c:var(--indigo);--cs:var(--indigo-soft)"><div class="t"><i>4</i>工具層</div><div class="d">MCP 查證＋本機工具（擷取、閱讀、刷題、追蹤）</div></div>
+      <div class="layer base"><div class="t">資料層 · Obsidian 資料夾 ＋ private Git repo</div><div class="d">人用 Obsidian 讀，AI 用檔案系統寫，Git 記錄每一次修改</div></div>
+    </div>
+    <div class="arch-detail" id="archDetail"></div>
+  </div>
+</div></section>
+
+<section id="flows"><div class="wrap reveal">
+  <div class="eyebrow">Workflows</div>
+  <h2>四條每天在跑的工作流</h2>
+  <p class="lead">點選上方分頁切換流程，點任一節點看細節。</p>
+  <div class="tabs" id="tabs"></div>
+  <div class="flow" id="flow"></div>
+  <div class="node-detail" id="nodeDetail"></div>
+</div></section>
+
+<section id="tools" class="alt"><div class="wrap reveal">
+  <div class="eyebrow">Tools</div>
+  <h2>工具箱：每件都標清楚現在能不能用</h2>
+  <p class="lead">有些是每天在用的，有些剛建好，有些還在計畫書階段。卡片上的標籤寫的是實際狀態。</p>
+  <div class="filters" id="filters">
+    <button class="chip on" data-f="all">全部</button>
+    <button class="chip" data-f="daily">日常使用</button>
+    <button class="chip" data-f="built">已建好</button>
+    <button class="chip" data-f="plan">規劃中</button>
+  </div>
+  <div class="grid" id="toolGrid"></div>
+</div></section>
+
+<section id="skills"><div class="wrap reveal">
+  <div class="eyebrow">Skills</div>
+  <h2>Skills：同一件事做第三次，就寫成 SOP</h2>
+  <p class="lead">一個 Skill 是一份 Markdown：寫明什麼時候觸發、步驟、檢核表、範本。正本放在 repo 的 <code>.agents/skills/</code>，Claude Code 與 Codex 透過 symlink 共用。</p>
+  <div class="skillgrid" id="skillGrid"></div>
+  <p class="lead" style="font-size:.9rem">寫自己的論文另用 plugin <code>academic-research-skills</code>（<code>/ars-plan</code>、<code>/ars-reviewer</code>、<code>/ars-citation-check</code>）。讀別人的論文走 PLR／ILR，寫自己的論文走 ARS，兩條線不混用。</p>
+</div></section>
+
+<section id="rules" class="alt"><div class="wrap reveal">
+  <div class="eyebrow">Hard-won rules</div>
+  <h2>踩坑換來的規則</h2>
+  <p class="lead">每一條都寫進了 CLAUDE.md 或記憶檔，背後都有一次真實的錯。</p>
+  <div class="rules">
+    <div class="rule"><h3>引用不信 AI 記憶</h3><p>任何文獻都要經 OpenEvidence 或 PubMed 確認存在，才能寫進文件。</p><div class="lesson">教訓：AI 會編出格式完美、但不存在的 PMID。</div></div>
+    <div class="rule"><h3>算數不心算</h3><p>金額、劑量、統計一律寫 Python 腳本執行，報告附腳本路徑與輸出。</p><div class="lesson">教訓：多步驟計算是語言模型最容易「看起來對」的地方。</div></div>
+    <div class="rule"><h3>產出必落檔</h3><p>講稿、分析、討論結論都存成 <code>主題_YYYYMMDD.md</code>，不只留在對話裡。</p><div class="lesson">教訓：對話被壓縮後，最好的那版講稿就找不回來了。</div></div>
+    <div class="rule"><h3>改檔先備份</h3><p><code>cp 檔案 檔案.bak-YYYYMMDD</code>，或確認已 commit。</p><div class="lesson">教訓：知識庫裡多數檔案是唯一版本。</div></div>
+    <div class="rule"><h3>病人資料不上 GitHub</h3><p>commit 前掃姓名、病歷號與大檔；病人資料夾不直接列目錄，用腳本只印代號。</p><div class="lesson">教訓：檔名和 docx 首列本身就可能含姓名。</div></div>
+    <div class="rule"><h3>派工看「知不知道去哪讀」</h3><p>已知路徑的檔案直接讀；只有不知道目標在哪的搜尋，才派 subagent。</p><div class="lesson">教訓：每次派工冷啟動約 12k tokens，比直接讀還貴。</div></div>
+    <div class="rule"><h3>講稿語氣有範本</h3><p>聽眾是主治醫師：客觀、實證、不輕挑。禁「首先我們看 Fig 1」這類指路句，也禁「兩者方向一致」這類空泛評語。</p><div class="lesson">教訓：範例要取自本人親手改過的稿，不能拿 AI 原稿當範本。</div></div>
+    <div class="rule"><h3>每個專案都有「00_先看這裡」</h3><p>跨 session、跨模型接手時，從入口檔與交接書讀起。</p><div class="lesson">教訓：沒有交接書，新 session 會把舊坑再踩一次。</div></div>
+  </div>
+</div></section>
+
+<section id="start"><div class="wrap reveal">
+  <div class="eyebrow">Build your own</div>
+  <h2>想自己蓋一套？從這五步開始</h2>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><h3>先有資料夾，再有 AI</h3><p>用 Obsidian 或任何資料夾整理現有筆記，<code>git init</code> 並設成 private repo。AI 能幫你的程度，取決於它讀得到多少你自己的東西。</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>寫一份短短的 CLAUDE.md</h3><p>你的身分、輸出語言、3–5 條絕對不能錯的事。先短；被 AI 搞砸一次，就補一條。</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>接一個查證管道</h3><p>醫療領域至少接 PubMed MCP，讓 AI「查到才能寫」。</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>把做第三次的事寫成 Skill</h3><p>從最常做的報告格式開始（例如 journal club），範本就用你自己改過的稿。</p></div></div>
+    <div class="step"><div class="num">5</div><div><h3>養成交接習慣</h3><p>每次大工程結束前，請 AI 寫一份「下次從哪裡接」的交接書，放在專案資料夾最上層。</p></div></div>
+  </div>
+
+  <div class="split">
+    <div class="box">
+      <h3>最小可用的 CLAUDE.md</h3>
+<pre>## 使用者
+牙周病專科醫師。回覆用繁體中文，臨床術語保留英文。
+
+## 鐵則
+1. 引用文獻必須先用 PubMed 查到才寫
+2. 產出一律存檔：主題_YYYYMMDD.md
+3. 改既有檔案前先備份
+
+## 任務路由
+| 任務 | 用什麼 |
+| 文獻報告 | skill journal-club |
+| 查證據 | MCP pubmed |</pre>
+    </div>
+    <div class="box">
+      <h3>這套環境實際用到的東西</h3>
+      <ul>
+        <li><b>Claude Code</b>：主力，規劃、寫作、驗收</li>
+        <li><b>Codex</b>：大量實作與抄錄（例如 125 張 slide 逐字抄錄）</li>
+        <li><b>Obsidian</b>：閱讀與連結筆記</li>
+        <li><b>MinerU／MLX Whisper</b>：PDF 擷取、本機語音轉錄</li>
+        <li><b>OpenEvidence／PubMed／NotebookLM</b>：MCP 查證與提問</li>
+        <li><b>Keynote／Pages</b>：最終簡報與講義</li>
+        <li><b>Git＋GitHub（private）</b>：版本控制</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  Research Antigravity · 個人臨床研究與知識管理系統 · Periodontics × Implant Dentistry × Medical AI<br>
+  數字為 2026-10-30 盤點結果。本頁不含任何病人資料；repo 本身維持 private。
+</div></footer>
+
+<script>
+(function(){
+  // theme
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  try{var t=localStorage.getItem('ra-theme'); if(t) root.setAttribute('data-theme',t);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    var dark=cur?cur==='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+    var next=dark?'light':'dark'; root.setAttribute('data-theme',next);
+    try{localStorage.setItem('ra-theme',next);}catch(e){}
+  });
+
+  // intent chooser
+  var routes={
+    new:'先看 <a href="#arch">四層架構</a> 了解「資料夾為什麼會變聰明」，再到 <a href="#start">五步起手</a>。',
+    user:'直接跳到 <a href="#skills">Skills</a> 與 <a href="#rules">踩坑換來的規則</a>，那裡最值得抄。',
+    doc:'看 <a href="#flows">四條工作流</a>：論文報告、課本簡報、演講錄音、專科準備。',
+    build:'從 <a href="#start">五步起手</a> 開始，附一份最小可用的 CLAUDE.md 範本。'
+  };
+  document.querySelectorAll('#chips .chip').forEach(function(c){
+    c.addEventListener('click',function(){
+      document.querySelectorAll('#chips .chip').forEach(function(x){x.classList.remove('on')});
+      c.classList.add('on'); document.getElementById('route').innerHTML=routes[c.dataset.r];
+    });
+  });
+
+  // architecture
+  var arch={
+    rule:{h:'規則層：CLAUDE.md＋protocols',li:['CLAUDE.md 只放 6 條鐵則和一張「任務 → 用什麼」路由表','派工、判斷、模板、維護等細節拆成 protocols，遇到情境才讀','全域規則（所有專案）與專案規則（這個資料夾）分兩層'],w:'CLAUDE.md 每次對話都會載入，寫太長反而被忽略。「遇到什麼情境讀哪份」比「全部背起來」有效。'},
+    mem:{h:'記憶層：跨 session 不失憶',li:['使用者偏好與糾正：例如「講稿不要用指路句」「簡報只交 Keynote」','各專案進度入口：一行指向該專案的「00_先看這裡」或交接書','權威順序：repo 內文件 > 記憶檔 > 搜尋結果，衝突時信日期新者'],w:'記憶檔只放「從程式碼和 Git 看不出來」的事：為什麼這樣做、使用者在意什麼。'},
+    skill:{h:'技能層：Skills＋Hooks',li:['一個 Skill 是一份 SKILL.md：觸發詞、步驟、檢核表、範本、腳本','正本放 repo，Claude Code 與 Codex 透過 symlink 共用','SessionStart hook 自動接好 skill 路徑'],w:'Skill 讓「做法」可以版本控制。改一次，下次所有 session 都用新版。'},
+    tool:{h:'工具層：MCP＋本機工具',li:['OpenEvidence、PubMed：每筆引用都要能查證','Corpus Capture：期刊網頁一鍵存全文到本機文獻庫','EasyRead、題庫 App、甄審追蹤 App：給人用的介面'],w:'AI 擅長整理與寫作，不擅長「記得事實」。事實交給可查證的外部來源。'}
+  };
+  function showArch(k){
+    var a=arch[k]; document.getElementById('archDetail').innerHTML='<h3>'+a.h+'</h3><ul>'+a.li.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul><div class="why"><b>為什麼：</b>'+a.w+'</div>';
+    document.querySelectorAll('#stack .layer[data-k]').forEach(function(l){l.classList.toggle('on',l.dataset.k===k)});
+  }
+  document.querySelectorAll('#stack .layer[data-k]').forEach(function(l){
+    l.addEventListener('click',function(){showArch(l.dataset.k)});
+    l.addEventListener('mouseenter',function(){showArch(l.dataset.k)});
+  });
+  showArch('rule');
+
+  // flows
+  var flows=[
+    {name:'📄 單篇論文',nodes:[
+      ['CAPTURE','期刊網頁','Corpus Capture','自製 Chrome 擴充套件。在期刊頁按一下，把出版商 HTML 全文＋圖片存成 <code>paper.md</code>，取代「下載 PDF → OCR」。也能讓模型丟 DOI，瀏覽器在背景依序試 OA 與醫院圖書館 proxy 自動抓。'],
+      ['LIBRARY','本機文獻庫','271 篇全文','每篇一個資料夾：<code>paper.md</code>（全文＋相對路徑圖片）、<code>meta.json</code>（Crossref）、<code>source.html</code>（規則改進後可重轉）。文獻庫本身是獨立 Git repo。'],
+      ['TRANSLATE','全文翻譯','paper-translate','逐段翻成台灣繁中，不摘要。自動檢查數字、長度、簡體字、大陸用語；失敗自動重翻，第三次仍失敗就標「⚠️ 未翻譯」保留原文，<b>不會靜默漏掉段落</b>。'],
+      ['ANALYZE','分析與報告','PLR／ILR skills','PLR 一次產出繁中分析、英文 Summary DOCX／Pages、4 分鐘講稿；ILR 產出 slide spec、Q&A 預期問題與截圖清單。'],
+      ['VERIFY','引用查證','oe_ask＋PubMed','文中每一篇被引用的文獻，都要查到才保留。定稿前的關鍵數字再用 audit-oe 多 agent 平行審計。'],
+      ['POLISH','講稿定稿','語氣＋去 AI 腔','presentation-script-tone 依本人改稿範例調語氣；sepia 修結構、Humanizer-zh-TW 修句子；最後進 Keynote。']]},
+    {name:'📚 課本章節',nodes:[
+      ['REGISTRY','課本登錄','textbook_registry','所有課本（Lindhe、Carranza、ITI Treatment Guide、Trombelli…）登錄來源與章節頁碼。'],
+      ['SPLIT','拆章擷取','MinerU／textbook-to-md','整本拆成單章 PDF，擷取正文與圖片；全書另建全文索引，可回查「這句話在課本哪一頁」。'],
+      ['NOTE','讀書筆記','read-textbook-chapter','雙語標題、折疊式圖解析、KEY TAKEAWAYS、簡報大綱種子，一章一份繁中筆記。'],
+      ['DECK','科內簡報','textbook-presentation-workflow','五階段：analysis → outline → plan → script → polish，每階段都落檔，可以中途停下隔天接。'],
+      ['FIGURE','補圖','figure-remap','講稿需要某張圖時按需擷取，內建 QC：裁錯就重抽，再錯才升級到更強的 vision 模型。']]},
+    {name:'🎙️ 演講錄音',nodes:[
+      ['RECORD','錄音／影片','mp3、m4a、mp4','年會、讀書會、課程錄音；可附議程照片與現場 slide 照片。'],
+      ['TRANSCRIBE','本機轉錄','extract-video-slides','MLX Whisper 在 Mac 本機轉出帶時間戳的逐字稿，影片可同步截取代表性 slide。'],
+      ['NOTES','主題筆記','lecture-recording-to-notes','修正牙科術語、依主題重組成繁中讀書筆記，保留案例、講者觀點、Q&A 與時間戳。'],
+      ['CORRECT','以 slide 校正','現場照片對照','用現場拍的 slide 修正聽錯的數字與名詞；slide 多時交給 Codex 逐張抄錄（實測 125/125 正確）。'],
+      ['EBM','EBM 查證','講者引用逐篇查','講者提到的研究逐篇查證，標出「講者說的」與「文獻實際寫的」差在哪裡。']]},
+    {name:'🦷 臨床與專科',nodes:[
+      ['CASE','Case 討論','analyzing-periodontal-cases','輸入 probing、X 光、病史，AI 扮演主治挑戰治療計畫，專挑盲點問。'],
+      ['DEID','去識別化','脫敏工具','病例文件與圖片先去識別化，才進任何 AI 流程；產出再跑隱私掃描。'],
+      ['TRACK','甄審追蹤','桌面 App','專科甄審案例、手術登錄簿、缺件追蹤、手術排程。exam-case-intake 讀 CC 報告產生建檔提案，人工審核後才寫入。'],
+      ['EXAM','刷題','題庫 App','筆試 600 題＋口試 447 題，單檔 HTML 雙擊即用；解析可回查課本頁碼。'],
+      ['ORAL','口試演練','「考我」','從真實口試題庫出題，AI 追問到答不出來為止，進度以「消掉幾題待補」計算。']]}
+  ];
+  var tabsEl=document.getElementById('tabs'), flowEl=document.getElementById('flow'), nd=document.getElementById('nodeDetail');
+  function showNode(f,i){
+    var n=flows[f].nodes[i]; nd.innerHTML='<b>'+n[1]+' · '+n[2]+'</b><br>'+n[3];
+    flowEl.querySelectorAll('.node').forEach(function(x,j){x.classList.toggle('on',j===i)});
+  }
+  function showFlow(f){
+    tabsEl.querySelectorAll('.tab').forEach(function(t,j){t.classList.toggle('on',j===f)});
+    flowEl.innerHTML='';
+    flows[f].nodes.forEach(function(n,i){
+      if(i){var a=document.createElement('div');a.className='arrow';a.textContent='→';flowEl.appendChild(a);}
+      var b=document.createElement('button');b.className='node';
+      b.innerHTML='<div class="k mono">'+String(i+1).padStart(2,'0')+' · '+n[0]+'</div><div class="h">'+n[1]+'</div><div class="s">'+n[2]+'</div>';
+      b.addEventListener('click',function(){showNode(f,i)}); flowEl.appendChild(b);
+    });
+    showNode(f,0);
+  }
+  flows.forEach(function(fl,f){var t=document.createElement('button');t.className='tab';t.textContent=fl.name;t.addEventListener('click',function(){showFlow(f)});tabsEl.appendChild(t);});
+  showFlow(0);
+
+  // tools
+  var tools=[
+    ['OpenEvidence','MCP','daily','臨床問題與單篇引用查證','日常查證主力','回答附出處，再回原文核對','定稿級審計改用 audit-oe'],
+    ['PubMed enhanced','MCP','daily','PICO 檢索、MeSH、PMID 核對','確認文獻存在與書目正確','PMID 與標題雙重核對','只到摘要層級，全文另抓'],
+    ['Corpus Capture v0.5','Chrome 擴充＋本機程式','daily','期刊網頁一鍵存全文＋圖到文獻庫','取代 PDF → OCR，圖文不跑版','Native Messaging，不需常駐 server','支援 Wiley、ScienceDirect、Springer、PMC，其他走通用規則'],
+    ['EasyRead 繁中版','本機閱讀器','daily','譯文與原文對照閱讀','paper-translate 翻完自動匯入','雙擊桌面圖示開啟','只在本機，不推 GitHub'],
+    ['NotebookLM','MCP','built','對上傳來源提問、產 Audio Overview','通勤時聽論文摘要','session 式問答','免費帳號每日 50 次'],
+    ['刷題題庫 App','單檔 HTML','built','專科筆試 600 題＋口試 447 題','雙擊即用，不需安裝','解析附課本出處','部分年份無官方答案鍵，答案由詳解推得'],
+    ['專科甄審追蹤','桌面 App','built','案例、手術登錄簿、缺件、排程','甄審送件前一眼看到缺什麼','AI 只產提案，人工審核才寫入','含去識別化包裝程式'],
+    ['EasyRead＋題庫雲端同步','Cloudflare','plan','手機端閱讀與刷題同步','把桌機工具帶到手機','計畫書已定案','待實作'],
+    ['Charting 數位化','OCR pipeline','plan','紙本牙周 charting 轉結構化資料','減少手抄、方便追蹤','OCR PoC 已驗證','7 個階段待執行'],
+    ['perio_photo','口內攝影流程','plan','牙周版口內攝影 shot list 與版型','術前術後照片標準化','由矯正版 ortho_photo 改造','拍攝順序待定']
+  ];
+  var label={daily:['日常使用','b-daily'],built:['已建好','b-built'],plan:['規劃中','b-plan']};
+  var grid=document.getElementById('toolGrid');
+  tools.forEach(function(t){
+    var c=document.createElement('div');c.className='card';c.dataset.s=t[2];
+    c.innerHTML='<div class="top"><div><h3>'+t[0]+'</h3><div class="kind">'+t[1]+'</div></div><span class="badge '+label[t[2]][1]+'">'+label[t[2]][0]+'</span></div>'+
+      '<dl><dt>做什麼</dt><dd>'+t[3]+'</dd><dt>帶來什麼</dt><dd>'+t[4]+'</dd><dt>做法</dt><dd>'+t[5]+'</dd><dt>限制</dt><dd>'+t[6]+'</dd></dl>';
+    grid.appendChild(c);
+  });
+  document.querySelectorAll('#filters .chip').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#filters .chip').forEach(function(x){x.classList.remove('on')}); b.classList.add('on');
+      grid.querySelectorAll('.card').forEach(function(c){c.style.display=(b.dataset.f==='all'||c.dataset.s===b.dataset.f)?'':'none'});
+    });
+  });
+
+  // skills
+  var skills=[
+    ['文獻報告','var(--coral)',[['plr-literature-analysis','PLR 三合一：分析＋DOCX＋講稿'],['ilr-literature-analysis','ILR：分析＋slide spec＋Q&A'],['ilr-google-slides','Claude 寫 spec、Codex 建、Claude 驗收']]],
+    ['單篇論文','var(--teal)',[['literature-extract','PDF → 含圖繁中分析'],['paper-digest / paper-review','知識吸收／journal club 評讀'],['paper-pipeline','一鍵整合上面兩者'],['corpus-fetch / paper-translate','丟 DOI 抓全文／全文翻譯']]],
+    ['查證','var(--indigo)',[['audit-oe','定稿前多 agent 平行審計引用與數字']]],
+    ['課本','var(--gold)',[['read-textbook-chapter','單章繁中讀書筆記'],['textbook-to-md','全書轉可搜尋 md'],['textbook-presentation-workflow','課本簡報五階段'],['figure-remap','按需補圖＋QC']]],
+    ['錄音／逐字稿','var(--teal)',[['extract-video-slides','本機轉錄＋截 slide'],['lecture-recording-to-notes','演講錄音 → 查證過的筆記'],['transcript-to-notes','逐字稿 → 主題筆記']]],
+    ['寫作語氣','var(--coral)',[['presentation-script-tone','保留本人口吻改講稿'],['sepia','去 AI 腔：結構層'],['Humanizer-zh-TW','去 AI 腔：句子層']]],
+    ['臨床','var(--indigo)',[['analyzing-periodontal-cases','治療計畫壓力測試'],['exam-case-intake','甄審建檔提案']]],
+    ['其他','var(--gold)',[['web-page-capture','網頁存成 md 筆記'],['yt-download','下載影片／音訊']]]
+  ];
+  var sg=document.getElementById('skillGrid');
+  skills.forEach(function(s){
+    var d=document.createElement('div');d.className='sk';d.style.setProperty('--c',s[1]);
+    d.innerHTML='<h3><span class="sw"></span>'+s[0]+'</h3><ul>'+s[2].map(function(x){return '<li><code>'+x[0]+'</code><br>'+x[1]+'</li>'}).join('')+'</ul>';
+    sg.appendChild(d);
+  });
+
+  // reveal
+  var els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:.08});
+    els.forEach(function(e){io.observe(e)});
+  } else els.forEach(function(e){e.classList.add('in')});
+
+  // count up
+  document.querySelectorAll('.stat .n').forEach(function(el){
+    var to=+el.dataset.to, st=null;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    function step(ts){ if(!st) st=ts; var p=Math.min((ts-st)/1100,1); el.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString(); if(p<1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  });
+})();
+</script>
+</body>
+</html>
