@@ -118,6 +118,9 @@ nav.top .links a:hover{color:var(--ink);text-decoration:none}
 .arrow{flex:0 0 34px;display:grid;place-items:center;color:var(--ink3)}
 .node-detail{margin-top:8px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:18px 20px;color:var(--ink2);box-shadow:var(--shadow)}
 .node-detail b{color:var(--ink)}
+.flowmap{margin:26px 0 8px;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:12px;box-shadow:var(--shadow);overflow-x:auto}
+.flowmap svg{min-width:640px}
+.flowmap figcaption{text-align:center;font-size:.82rem;color:var(--ink3);margin-top:6px}
 
 /* tools */
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
@@ -229,7 +232,111 @@ footer{border-top:1px solid var(--line);padding:36px 0 60px;color:var(--ink3);fo
 <section id="flows"><div class="wrap reveal">
   <div class="eyebrow">Workflows</div>
   <h2>四條每天在跑的工作流</h2>
-  <p class="lead">點選上方分頁切換流程，點任一節點看細節。</p>
+  <p class="lead">先看全貌，再點下方分頁切換流程，點任一節點看細節。</p>
+  <figure class="flowmap">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="知識庫功能流程圖" style="width:100%;height:auto;display:block" font-family="PingFang TC, Noto Sans TC, Microsoft JhengHei, sans-serif">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4a5866"/></marker>
+    <marker id="ahb" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#14202c"/></marker>
+    <style>
+      .stage{font-size:15px;font-weight:700;fill:#14202c}
+      .sub{font-size:11px;fill:#7c8894}
+      .t{font-size:14px;font-weight:600;fill:#14202c;text-anchor:middle}
+      .s{font-size:11.5px;fill:#4a5866;text-anchor:middle}
+      .tw{font-size:14px;font-weight:700;fill:#fff;text-anchor:middle}
+      .sw{font-size:11.5px;fill:#ffffffd9;text-anchor:middle}
+      .lbl{font-size:12px;fill:#4a5866;font-weight:600}
+      .box{fill:#fff;stroke:#d8d2c4;stroke-width:1.2}
+      .ln{stroke:#4a5866;stroke-width:1.6;fill:none}
+    </style>
+  </defs>
+
+  <rect width="1200" height="800" rx="20" fill="#f6f4ef"/>
+
+  <!-- 左側階段標籤 -->
+  <g>
+    <text class="stage" x="28" y="73">① 輸入</text><text class="sub" x="28" y="91">素材從哪裡來</text>
+    <text class="stage" x="28" y="173">② 擷取</text><text class="sub" x="28" y="191">轉成 AI 讀得懂的檔</text>
+    <text class="stage" x="28" y="280">③ 知識庫</text><text class="sub" x="28" y="298">Obsidian 資料夾</text>
+    <text class="stage" x="28" y="440">④ AI 工作區</text><text class="sub" x="28" y="458">規則＋SOP＋查證</text>
+    <text class="stage" x="28" y="605">⑤ 產出</text><text class="sub" x="28" y="623">交得出去的東西</text>
+    <text class="stage" x="28" y="725">⑥ 保存與分享</text><text class="sub" x="28" y="743">Git 版本控制</text>
+  </g>
+
+  <!-- ① 輸入 -->
+  <g>
+    <rect class="box" x="165" y="45" width="190" height="56" rx="12"/><text class="t" x="260" y="70">🌐 期刊網頁</text><text class="s" x="260" y="89">Wiley・ScienceDirect・PMC</text>
+    <rect class="box" x="385" y="45" width="190" height="56" rx="12"/><text class="t" x="480" y="70">📕 課本 PDF</text><text class="s" x="480" y="89">Lindhe・Carranza・ITI</text>
+    <rect class="box" x="605" y="45" width="190" height="56" rx="12"/><text class="t" x="700" y="70">🎙️ 演講錄音／影片</text><text class="s" x="700" y="89">年會・讀書會・課程</text>
+    <rect class="box" x="825" y="45" width="190" height="56" rx="12"/><text class="t" x="920" y="70">🦷 臨床 case</text><text class="s" x="920" y="89">病歷・X 光・照片</text>
+  </g>
+
+  <!-- ② 擷取 -->
+  <g>
+    <rect x="165" y="145" width="190" height="56" rx="12" fill="#e3e6fb" stroke="#4f5bd5" stroke-width="1.2"/><text class="t" x="260" y="170">Corpus Capture</text><text class="s" x="260" y="189">自製 Chrome 擴充套件</text>
+    <rect x="385" y="145" width="190" height="56" rx="12" fill="#e3e6fb" stroke="#4f5bd5" stroke-width="1.2"/><text class="t" x="480" y="170">MinerU／textbook-to-md</text><text class="s" x="480" y="189">拆章・擷取正文與圖</text>
+    <rect x="605" y="145" width="190" height="56" rx="12" fill="#e3e6fb" stroke="#4f5bd5" stroke-width="1.2"/><text class="t" x="700" y="170">MLX Whisper</text><text class="s" x="700" y="189">Mac 本機轉錄＋截 slide</text>
+    <rect x="825" y="145" width="190" height="56" rx="12" fill="#e3e6fb" stroke="#4f5bd5" stroke-width="1.2"/><text class="t" x="920" y="170">去識別化工具</text><text class="s" x="920" y="189">文件＋影像先脫敏</text>
+  </g>
+  <g class="ln" marker-end="url(#ah)">
+    <line x1="260" y1="101" x2="260" y2="143"/><line x1="480" y1="101" x2="480" y2="143"/><line x1="700" y1="101" x2="700" y2="143"/><line x1="920" y1="101" x2="920" y2="143"/>
+    <line x1="260" y1="201" x2="260" y2="246"/><line x1="480" y1="201" x2="480" y2="246"/><line x1="700" y1="201" x2="700" y2="246"/><line x1="920" y1="201" x2="920" y2="246"/>
+  </g>
+
+  <!-- ③ 知識庫 -->
+  <rect x="150" y="232" width="1030" height="98" rx="16" fill="#d6efe9" stroke="#0f766e" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="1168" y="250" font-size="11" fill="#0f766e" text-anchor="end" font-weight="700">📂 Research_Antigravity</text>
+  <g>
+    <!-- cylinders -->
+    <g transform="translate(175,250)"><path d="M0,10 v42 a85,10 0 0 0 170,0 v-42" fill="#0f766e"/><ellipse cx="85" cy="10" rx="85" ry="10" fill="#14968b"/><text class="tw" x="85" y="38">文獻庫</text><text class="sw" x="85" y="56">paper.md＋圖・271 篇</text></g>
+    <g transform="translate(395,250)"><path d="M0,10 v42 a85,10 0 0 0 170,0 v-42" fill="#0f766e"/><ellipse cx="85" cy="10" rx="85" ry="10" fill="#14968b"/><text class="tw" x="85" y="38">課本筆記</text><text class="sw" x="85" y="56">＋全文索引</text></g>
+    <g transform="translate(615,250)"><path d="M0,10 v42 a85,10 0 0 0 170,0 v-42" fill="#0f766e"/><ellipse cx="85" cy="10" rx="85" ry="10" fill="#14968b"/><text class="tw" x="85" y="38">逐字稿・讀書筆記</text><text class="sw" x="85" y="56">依主題重組</text></g>
+    <g transform="translate(835,250)"><path d="M0,10 v42 a85,10 0 0 0 170,0 v-42" fill="#0f766e"/><ellipse cx="85" cy="10" rx="85" ry="10" fill="#14968b"/><text class="tw" x="85" y="38">病例摘要</text><text class="sw" x="85" y="56">已去識別化</text></g>
+    <rect x="1030" y="258" width="140" height="62" rx="10" fill="#b7791f"/><text class="tw" x="1100" y="282" font-size="12.5">📜 CLAUDE.md</text><text class="sw" x="1100" y="300">🧠 Memory・交接書</text>
+  </g>
+
+  <!-- ③ ↔ ④ -->
+  <line class="ln" x1="700" y1="333" x2="700" y2="413" stroke-width="2.4" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <rect x="712" y="355" width="86" height="20" rx="10" fill="#f6f4ef"/><text class="lbl" x="718" y="370">讀取 &amp; 落檔</text>
+
+  <!-- ④ AI 工作區 -->
+  <rect x="150" y="390" width="1030" height="140" rx="16" fill="#fbe3e8" stroke="#d9536f" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <g>
+    <rect x="230" y="420" width="230" height="80" rx="12" fill="#6b5ce7"/><text class="tw" x="345" y="446">🧩 Skills（SOP）</text><text class="sw" x="345" y="466">PLR・ILR・課本簡報・錄音筆記</text><text class="sw" x="345" y="484">全文翻譯・去 AI 腔・case 討論</text>
+    <rect x="590" y="415" width="220" height="90" rx="14" fill="#d9536f"/><text class="tw" x="700" y="450" font-size="17">🤖 Claude Code</text><text class="sw" x="700" y="474">規劃・寫作・驗收</text>
+    <rect x="900" y="405" width="250" height="52" rx="12" fill="#0088cc"/><text class="tw" x="1025" y="427">🔍 MCP 查證</text><text class="sw" x="1025" y="445">OpenEvidence・PubMed・NotebookLM</text>
+    <rect x="900" y="468" width="250" height="48" rx="12" fill="#4f5bd5"/><text class="tw" x="1025" y="489">⚙️ Codex</text><text class="sw" x="1025" y="506">大量實作・逐張抄錄</text>
+  </g>
+  <line class="ln" x1="460" y1="460" x2="588" y2="460" stroke-dasharray="5 4" marker-end="url(#ah)"/><text class="lbl" x="506" y="452">SOP</text>
+  <line class="ln" x1="812" y1="440" x2="898" y2="431" marker-start="url(#ah)" marker-end="url(#ah)"/><text class="lbl" x="818" y="424" font-size="11">引用必查證</text>
+  <line class="ln" x1="812" y1="482" x2="898" y2="491" marker-start="url(#ah)" marker-end="url(#ah)"/><text class="lbl" x="818" y="512" font-size="11">派工 &amp; 驗收</text>
+
+  <!-- ④ → ⑤ -->
+  <line class="ln" x1="700" y1="507" x2="700" y2="566" stroke-width="2.4" marker-end="url(#ah)"/>
+
+  <!-- ⑤ 產出 -->
+  <g>
+    <rect class="box" x="165" y="570" width="186" height="64" rx="12"/><text class="t" x="258" y="597">📊 Keynote</text><text class="s" x="258" y="617">簡報＋逐頁講稿</text>
+    <rect class="box" x="367" y="570" width="186" height="64" rx="12"/><text class="t" x="460" y="597">📄 PLR Summary</text><text class="s" x="460" y="617">DOCX／Pages 講義</text>
+    <rect class="box" x="569" y="570" width="186" height="64" rx="12"/><text class="t" x="662" y="597">📝 繁中筆記・翻譯</text><text class="s" x="662" y="617">Obsidian・EasyRead</text>
+    <rect class="box" x="771" y="570" width="186" height="64" rx="12"/><text class="t" x="864" y="597">📱 題庫・甄審 App</text><text class="s" x="864" y="617">專科準備</text>
+    <rect class="box" x="973" y="570" width="186" height="64" rx="12"/><text class="t" x="1066" y="597">✍️ 論文稿件</text><text class="s" x="1066" y="617">ARS plugin</text>
+  </g>
+
+  <!-- ⑤ → ⑥ -->
+  <line class="ln" x1="560" y1="636" x2="560" y2="694" stroke-width="2" marker-end="url(#ah)"/>
+  <text class="lbl" x="570" y="670">git push</text>
+
+  <!-- ⑥ -->
+  <g>
+    <g transform="translate(445,696)"><path d="M0,9 v40 a115,9 0 0 0 230,0 v-40" fill="#24292e"/><ellipse cx="115" cy="9" rx="115" ry="9" fill="#3a4148"/><text class="tw" x="115" y="35">🐙 GitHub Private Repo</text><text class="sw" x="115" y="52">病人資料不進 repo</text></g>
+  </g>
+
+  <text x="1168" y="785" font-size="10.5" fill="#7c8894" text-anchor="end">Research Antigravity · 2026-10-30</text>
+</svg>
+
+    <figcaption>從素材進來到產出交付：六層各自的工具與資料流向</figcaption>
+  </figure>
   <div class="tabs" id="tabs"></div>
   <div class="flow" id="flow"></div>
   <div class="node-detail" id="nodeDetail"></div>
